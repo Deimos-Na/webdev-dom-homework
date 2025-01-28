@@ -3,8 +3,15 @@ import {
   renderComments,
   handleLike,
   addComment,
+  updateComments,
 } from './comments.js'
+import { fetchComments } from './api.js'
 import { escapeHTML } from './utils.js'
+
+fetchComments().then((data) => {
+  updateComments(data)
+  renderComments()
+})
 
 const commentsList = document.querySelector('.comments')
 const inputName = document.getElementById('inpName')
