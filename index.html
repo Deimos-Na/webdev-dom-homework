@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
@@ -8,42 +8,7 @@
   </head>
   <body>
     <div class="container">
-      <ul class="comments">
-        <li class="comment">
-          <div class="comment-header">
-            <div>Глеб Фокин</div>
-            <div>12.02.22 12:18</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Это будет первый комментарий на этой странице
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">3</span>
-              <button class="like-button"></button>
-            </div>
-          </div>
-        </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
-      </ul>
+      <ul class="comments"></ul>
       <div class="add-form">
         <input
           id="inpName"
@@ -62,147 +27,6 @@
         </div>
       </div>
     </div>
-
-    <script>
-      'use strict'
-
-      const commentsList = document.querySelector('.comments')
-      const inputName = document.getElementById('inpName')
-      const inputText = document.getElementById('inpText')
-      const buttonAdd = document.getElementById('btn')
-
-      let commentsData = [
-        {
-          name: 'Глеб Фокин',
-          date: '12.02.22 12:18',
-          text: 'Это будет первый комментарий на этой странице',
-          likes: 3,
-          isLiked: false,
-        },
-        {
-          name: 'Варвара Н.',
-          date: '13.02.22 19:22',
-          text: 'Мне нравится как оформлена эта страница! ❤',
-          likes: 75,
-          isLiked: true,
-        },
-      ]
-
-      function renderComments() {
-        commentsList.innerHTML = ''
-        commentsData.forEach((comment, index) => {
-          const commentElement = document.createElement('li')
-          commentElement.classList.add('comment')
-
-          commentElement.innerHTML = `
-          <div class="comment-header">
-            <div>${comment.name}</div>
-            <div>${comment.date}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">${comment.text}</div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">${comment.likes}</span>
-              <button class="like-button ${
-                comment.isLiked ? '-active-like' : ''
-              }" data-index="${index}"></button>
-            </div>
-          </div>
-        `
-
-          commentsList.appendChild(commentElement)
-        })
-
-        attachLikeEventListeners()
-        attachCommentClickListeners()
-      }
-
-      function attachLikeEventListeners() {
-        const likeButtons = document.querySelectorAll('.like-button')
-
-        likeButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            const index = button.getAttribute('data-index')
-            const comment = commentsData[index]
-
-            comment.isLiked = !comment.isLiked
-
-            if (comment.isLiked) {
-              comment.likes++
-              button.classList.add('-active-like')
-            } else {
-              comment.likes--
-              button.classList.remove('-active-like')
-            }
-
-            renderComments()
-          })
-        })
-      }
-
-      function attachCommentClickListeners() {
-        const commentElements = document.querySelectorAll('.comment-body')
-
-        commentElements.forEach((commentElement, index) => {
-          commentElement.addEventListener('click', () => {
-            const comment = commentsData[index]
-            inputText.value = `> ${comment.name}: ${comment.text}\n`
-          })
-        })
-      }
-
-      buttonAdd.addEventListener('click', () => {
-        const name = inputName.value.trim()
-        const text = inputText.value.trim()
-
-        if (name === '' || text === '') {
-          if (name === '') inputName.classList.add('error')
-          else inputName.classList.remove('error')
-
-          if (text === '') inputText.classList.add('error')
-          else inputText.classList.remove('error')
-
-          return
-        }
-
-        const escapedText = escapeHTML(text)
-        const escapedName = escapeHTML(name)
-
-        const date = new Date()
-        const formattedDate = `${date.getDate()}.${
-          date.getMonth() + 1
-        }.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
-
-        const newComment = {
-          name: escapedName,
-          date: formattedDate,
-          text: escapedText,
-          likes: 0,
-          isLiked: false,
-        }
-
-        commentsData.push(newComment)
-
-        inputName.value = ''
-        inputText.value = ''
-
-        inputName.classList.remove('error')
-        inputText.classList.remove('error')
-
-        renderComments()
-      })
-
-      function escapeHTML(str) {
-        return str
-          .replaceAll('<', '&lt;')
-          .replaceAll('&', '&amp;')
-          .replaceAll('"', '&quot;')
-          .replaceAll("'", '&#39;')
-      }
-
-      renderComments()
-    </script>
+    <script type="module" src="./script.js"></script>
   </body>
 </html>
