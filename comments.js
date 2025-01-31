@@ -94,9 +94,19 @@ export function addComment(name, text) {
       if (error.message === 'Ошибка сервера') {
         alert('Ошибка сервера')
       }
-
       if (error.message === 'Неверный запрос') {
         alert('Имя и комментарий должны быть не короче 3-х символов')
+
+        const inputName = document.getElementById('inpName')
+        const inputText = document.getElementById('inpText')
+
+        inputName.classList.add('error')
+        inputText.classList.add('error')
+
+        setTimeout(() => {
+          inputName.classList.remove('error')
+          inputText.classList.remove('error')
+        }, 2000)
       }
     })
 }
