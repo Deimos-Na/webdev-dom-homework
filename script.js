@@ -21,7 +21,6 @@ const buttonAdd = document.getElementById('btn')
 buttonAdd.addEventListener('click', () => {
   const name = inputName.value.trim()
   const text = inputText.value.trim()
-
   if (name === '' || text === '') {
     console.error('Заполните форму')
     inputName.classList.toggle('error', name === '')
