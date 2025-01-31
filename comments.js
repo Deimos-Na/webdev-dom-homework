@@ -3,6 +3,7 @@ import {
   attachCommentClickListeners,
   attachLikeEventListeners,
 } from './listeners.js'
+import { delay } from './utils.js'
 
 export let commentsData = [
   // {
@@ -24,6 +25,7 @@ export let commentsData = [
 export function renderComments(commentsData) {
   const commentsList = document.querySelector('.comments')
   commentsList.innerHTML = ''
+
   commentsData.forEach((comment, index) => {
     const commentElement = document.createElement('li')
     commentElement.classList.add('comment')
@@ -41,20 +43,34 @@ export function renderComments(commentsData) {
           <span class="likes-counter">${comment.likes}</span>
           <button class="like-button ${
             comment.isLiked ? '-active-like' : ''
-          }" data-index="${index}"></button>
+          } ${comment.isLikeLoading ? 'like-loading' : ''}" 
+          data-index="${index}"></button>
         </div>
       </div>
     `
+
     commentsList.appendChild(commentElement)
   })
+
   attachLikeEventListeners()
   attachCommentClickListeners()
 }
 
-export function handleLike(commentsData, index) {
+export async function handleLike(commentsData, index) {
   const comment = commentsData[index]
+
+  if (comment.isLikeLoading) return
+
+  comment.isLikeLoading = true
+  renderComments(commentsData)
+
+  await delay(1000)
+
+  comment.likes = comment.isLiked ? comment.likes - 1 : comment.likes + 1
   comment.isLiked = !comment.isLiked
-  comment.isLiked ? comment.likes++ : comment.likes--
+  comment.isLikeLoading = false
+
+  renderComments(commentsData)
 }
 
 export function addComment(name, text) {
