@@ -74,27 +74,28 @@ export async function handleLike(commentsData, index) {
 }
 
 export function addComment(name, text) {
-  postComments(name, text)
-    .then(() => {
-      return fetchComments()
-    })
+  return postComments(name, text)
+    .then(() => fetchComments())
     .then((data) => {
+      document.getElementById('inpName').value = ''
+      document.getElementById('inpText').value = ''
+
       document.querySelector('.form-loading').style.display = 'none'
       document.querySelector('.add-form').style.display = 'flex'
       updateComments(data)
       renderComments(data)
     })
     .catch((error) => {
+      console.error('Ошибка в addComment:', error.message)
+
       document.querySelector('.form-loading').style.display = 'none'
       document.querySelector('.add-form').style.display = 'flex'
 
       if (error.message === 'Failed to fetch') {
         alert('Нет интернета, попробуйте снова')
-      }
-      if (error.message === 'Ошибка сервера') {
+      } else if (error.message === 'Ошибка сервера') {
         alert('Ошибка сервера')
-      }
-      if (error.message === 'Неверный запрос') {
+      } else if (error.message === 'Неверный запрос') {
         alert('Имя и комментарий должны быть не короче 3-х символов')
 
         const inputName = document.getElementById('inpName')
@@ -107,6 +108,8 @@ export function addComment(name, text) {
           inputName.classList.remove('error')
           inputText.classList.remove('error')
         }, 2000)
+      } else {
+        alert('Произошла неизвестная ошибка. Попробуйте позже.')
       }
     })
 }

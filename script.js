@@ -52,8 +52,8 @@ buttonAdd.addEventListener('click', () => {
 
   addComment(escapedName, escapedText, commentsData)
     .then(() => {
-      document.querySelector('.form-loading').style.display = 'block'
-      document.querySelector('.add-form').style.display = 'none'
+      document.querySelector('.form-loading').style.display = 'none'
+      document.querySelector('.add-form').style.display = 'flex'
 
       formData.name = ''
       formData.text = ''
@@ -62,7 +62,8 @@ buttonAdd.addEventListener('click', () => {
     })
     .catch((error) => {
       console.error(error)
-
+      document.querySelector('.form-loading').style.display = 'none'
+      document.querySelector('.add-form').style.display = 'flex'
       alert('Произошла ошибка. Попробуйте позже.')
 
       inputName.value = formData.name
