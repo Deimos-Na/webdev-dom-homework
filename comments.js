@@ -74,6 +74,8 @@ export async function handleLike(commentsData, index) {
 }
 
 export function addComment(name, text) {
+  document.querySelector('.form-loading').style.display = 'block'
+  document.querySelector('.add-form').style.display = 'none'
   return postComments(name, text)
     .then(() => fetchComments())
     .then((data) => {
@@ -117,5 +119,3 @@ export function addComment(name, text) {
 export const updateComments = (newComments) => {
   commentsData = newComments
 }
-
-изменения
