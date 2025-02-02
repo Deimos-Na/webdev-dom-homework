@@ -18,3 +18,27 @@ export const fetchComments = () => {
       return appComments
     })
 }
+
+export const postComments = (name, text) => {
+  return fetch(host + '/comments', {
+    method: 'POST',
+    body: JSON.stringify({ text, name }),
+  }).then(async (response) => {
+    console.log('Response status:', response.status)
+
+    const data = await response.json().catch(() => null)
+    console.log('Response data:', data)
+
+    if (response.status === 500) {
+      throw new Error('Ошибка сервера')
+    }
+    if (response.status === 400) {
+      throw new Error('Неверный запрос')
+    }
+    if (response.status === 201) {
+      return data
+    }
+
+    throw new Error('Неизвестная ошибка')
+  })
+}

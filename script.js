@@ -1,12 +1,18 @@
 import {
   commentsData,
   renderComments,
-  handleLike,
   addComment,
   updateComments,
 } from './comments.js'
 import { fetchComments } from './api.js'
 import { escapeHTML } from './utils.js'
+
+document.querySelector('.comments').innerHTML =
+  'Пожалуйста, подождите, выполняется загрузка комментариев'
+fetchComments().then((data) => {
+  updateComments(data)
+  renderComments(data)
+})
 
 fetchComments().then((data) => {
   updateComments(data)
@@ -18,40 +24,32 @@ const inputName = document.getElementById('inpName')
 const inputText = document.getElementById('inpText')
 const buttonAdd = document.getElementById('btn')
 
-function attachLikeEventListeners() {
-  const likeButtons = document.querySelectorAll('.like-button')
-  likeButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const index = button.getAttribute('data-index')
-      handleLike(commentsData, index)
-      renderComments(
-        commentsList,
-
-        commentsData,
-      )
-      attachLikeEventListeners()
-    })
-  })
+let formData = {
+  name: '',
+  text: '',
 }
 
-function attachCommentClickListeners() {
-  const commentElements = document.querySelectorAll('.comment-body')
-  commentElements.forEach((commentElement, index) => {
-    commentElement.addEventListener('click', () => {
-      const comment = commentsData[index]
-      inputText.value = `> ${comment.name}: ${comment.text}\n`
-      inputText.focus()
-    })
-  })
-}
+inputName.addEventListener('input', (event) => {
+  formData.name = event.target.value
+})
+
+inputText.addEventListener('input', (event) => {
+  formData.text = event.target.value
+})
 
 buttonAdd.addEventListener('click', () => {
   const name = inputName.value.trim()
   const text = inputText.value.trim()
 
   if (name === '' || text === '') {
+    console.error('Заполните форму')
     inputName.classList.toggle('error', name === '')
     inputText.classList.toggle('error', text === '')
+
+    setTimeout(() => {
+      inputName.classList.remove('error')
+      inputText.classList.remove('error')
+    }, 2000)
     return
   }
 
@@ -59,17 +57,24 @@ buttonAdd.addEventListener('click', () => {
   const escapedText = escapeHTML(text)
 
   addComment(escapedName, escapedText, commentsData)
+    .then(() => {
+      document.querySelector('.form-loading').style.display = 'none'
+      document.querySelector('.add-form').style.display = 'flex'
 
-  inputName.value = ''
-  inputText.value = ''
-  inputName.classList.remove('error')
-  inputText.classList.remove('error')
+      formData.name = ''
+      formData.text = ''
+      inputName.value = ''
+      inputText.value = ''
+    })
+    .catch((error) => {
+      console.error(error)
+      document.querySelector('.form-loading').style.display = 'none'
+      document.querySelector('.add-form').style.display = 'flex'
+      alert('Произошла ошибка. Попробуйте позже.')
 
-  renderComments(commentsList, commentsData)
-  attachLikeEventListeners()
-  attachCommentClickListeners()
+      inputName.value = formData.name
+      inputText.value = formData.text
+    })
+
+  renderComments(commentsData)
 })
-
-renderComments(commentsList, commentsData)
-attachLikeEventListeners()
-attachCommentClickListeners()
