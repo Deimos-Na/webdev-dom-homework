@@ -14,6 +14,12 @@ fetchComments().then((data) => {
   renderComments(data)
 })
 
+fetchComments().then((data) => {
+  updateComments(data)
+  renderComments()
+})
+
+const commentsList = document.querySelector('.comments')
 const inputName = document.getElementById('inpName')
 const inputText = document.getElementById('inpText')
 const buttonAdd = document.getElementById('btn')

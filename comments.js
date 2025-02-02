@@ -117,3 +117,7 @@ export function addComment(name, text) {
 export const updateComments = (newComments) => {
   commentsData = newComments
 }
+
+export const updateComments = (newComments) => {
+  commentsData = newComments
+}
