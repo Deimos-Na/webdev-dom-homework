@@ -1,9 +1,9 @@
-import { fetchComments, postComments } from './api.js'
+import { fetchComments, postComments } from "./api.js"
 import {
   attachCommentClickListeners,
   attachLikeEventListeners,
-} from './listeners.js'
-import { delay } from './utils.js'
+} from "./listeners.js"
+import { delay } from "./utils.js"
 
 export let commentsData = [
   // {
@@ -23,12 +23,12 @@ export let commentsData = [
 ]
 
 export function renderComments(commentsData) {
-  const commentsList = document.querySelector('.comments')
-  commentsList.innerHTML = ''
+  const commentsList = document.querySelector(".comments")
+  commentsList.innerHTML = ""
 
   commentsData.forEach((comment, index) => {
-    const commentElement = document.createElement('li')
-    commentElement.classList.add('comment')
+    const commentElement = document.createElement("li")
+    commentElement.classList.add("comment")
 
     commentElement.innerHTML = `
       <div class="comment-header">
@@ -42,8 +42,8 @@ export function renderComments(commentsData) {
         <div class="likes">
           <span class="likes-counter">${comment.likes}</span>
           <button class="like-button ${
-            comment.isLiked ? '-active-like' : ''
-          } ${comment.isLikeLoading ? 'like-loading' : ''}" 
+            comment.isLiked ? "-active-like" : ""
+          } ${comment.isLikeLoading ? "like-loading" : ""}" 
           data-index="${index}"></button>
         </div>
       </div>
@@ -74,44 +74,44 @@ export async function handleLike(commentsData, index) {
 }
 
 export function addComment(name, text) {
-  document.querySelector('.form-loading').style.display = 'block'
-  document.querySelector('.add-form').style.display = 'none'
+  document.querySelector(".form-loading").style.display = "block"
+  document.querySelector(".add-form").style.display = "none"
   return postComments(name, text)
     .then(() => fetchComments())
     .then((data) => {
-      document.getElementById('inpName').value = ''
-      document.getElementById('inpText').value = ''
+      document.getElementById("inpName").value = ""
+      document.getElementById("inpText").value = ""
 
-      document.querySelector('.form-loading').style.display = 'none'
-      document.querySelector('.add-form').style.display = 'flex'
+      document.querySelector(".form-loading").style.display = "none"
+      document.querySelector(".add-form").style.display = "flex"
       updateComments(data)
       renderComments(data)
     })
     .catch((error) => {
-      console.error('Ошибка в addComment:', error.message)
+      console.error("Ошибка в addComment:", error.message)
 
-      document.querySelector('.form-loading').style.display = 'none'
-      document.querySelector('.add-form').style.display = 'flex'
+      document.querySelector(".form-loading").style.display = "none"
+      document.querySelector(".add-form").style.display = "flex"
 
-      if (error.message === 'Failed to fetch') {
-        alert('Нет интернета, попробуйте снова')
-      } else if (error.message === 'Ошибка сервера') {
-        alert('Ошибка сервера')
-      } else if (error.message === 'Неверный запрос') {
-        alert('Имя и комментарий должны быть не короче 3-х символов')
+      if (error.message === "Failed to fetch") {
+        alert("Нет интернета, попробуйте снова")
+      } else if (error.message === "Ошибка сервера") {
+        alert("Ошибка сервера")
+      } else if (error.message === "Неверный запрос") {
+        alert("Имя и комментарий должны быть не короче 3-х символов")
 
-        const inputName = document.getElementById('inpName')
-        const inputText = document.getElementById('inpText')
+        const inputName = document.getElementById("inpName")
+        const inputText = document.getElementById("inpText")
 
-        inputName.classList.add('error')
-        inputText.classList.add('error')
+        inputName.classList.add("error")
+        inputText.classList.add("error")
 
         setTimeout(() => {
-          inputName.classList.remove('error')
-          inputText.classList.remove('error')
+          inputName.classList.remove("error")
+          inputText.classList.remove("error")
         }, 2000)
       } else {
-        alert('Произошла неизвестная ошибка. Попробуйте позже.')
+        alert("Произошла неизвестная ошибка. Попробуйте позже.")
       }
     })
 }
