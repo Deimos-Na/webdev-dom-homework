@@ -1,6 +1,6 @@
-import { postComment } from './api.js'
-import { comments, updateComments } from './comments.js'
-import { sanitizeHtml } from './sanitizeHtml.js'
+import { postComment } from './api'
+import { comments, updateComments } from './comments'
+import { sanitizeHtml } from './sanitizeHtml'
 
 export const initLikeListeners = (renderComments) => {
   const likeButtons = document.querySelectorAll('.like-button')

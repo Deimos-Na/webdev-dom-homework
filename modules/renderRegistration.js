@@ -1,11 +1,11 @@
-import { fetchAndRenderComments } from '../index.js'
-import { registration, setName, setToken } from './api.js'
-import { renderLogin } from './renderLogin.js'
+import { fetchAndRenderComments } from '../index'
+import { registration, setName, setToken } from './api'
+import { renderLogin } from './renderLogin'
 
 export const renderRegistration = () => {
-    const container = document.querySelector('.container')
+  const container = document.querySelector('.container')
 
-    const loginHtml = `
+  const loginHtml = `
     
 		<section class="add-form">
     <h1>Форма регистрации</h1>
@@ -40,26 +40,26 @@ export const renderRegistration = () => {
     </fieldset>
     </section>
 		`
-    container.innerHTML = loginHtml
+  container.innerHTML = loginHtml
 
-    document.querySelector('.registry').addEventListener('click', () => {
-        renderLogin()
-    })
+  document.querySelector('.registry').addEventListener('click', () => {
+    renderLogin()
+  })
 
-    const nameEl = document.querySelector('#name')
-    const loginEl = document.querySelector('#login')
-    const passwordEl = document.querySelector('#password')
-    const submitButton = document.querySelector('.button-main')
+  const nameEl = document.querySelector('#name')
+  const loginEl = document.querySelector('#login')
+  const passwordEl = document.querySelector('#password')
+  const submitButton = document.querySelector('.button-main')
 
-    submitButton.addEventListener('click', () => {
-        registration(nameEl.value, loginEl.value, passwordEl.value)
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                setToken(data.user.token)
-                setName(data.user.name)
-                fetchAndRenderComments()
-            })
-    })
+  submitButton.addEventListener('click', () => {
+    registration(nameEl.value, loginEl.value, passwordEl.value)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        setToken(data.user.token)
+        setName(data.user.name)
+        fetchAndRenderComments()
+      })
+  })
 }
