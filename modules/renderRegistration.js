@@ -1,0 +1,65 @@
+import { fetchAndRenderComments } from '../index'
+import { registration, setName, setToken } from './api'
+import { renderLogin } from './renderLogin'
+
+export const renderRegistration = () => {
+  const container = document.querySelector('.container')
+
+  const loginHtml = `
+    
+		<section class="add-form">
+    <h1>Форма регистрации</h1>
+    <input
+        type="text"
+        class="add-form-name"
+        placeholder="Введите имя"
+        id="name"
+        required
+    />
+    <input
+        type="text"
+        class="add-form-name"
+        placeholder="Введите логин"
+        id="login"
+        required
+    />
+    <input
+        type="password"
+        class="add-form-pass"
+        placeholder="Введите пароль"
+        id="password"
+        required
+    />
+    <fieldset class="add-form-registry">
+        <button class="add-form-button button-main" type="submit">
+            Зарегистрироваться
+        </button>
+        <a href="#" class="add-form-button-link registry">
+            Войти
+        </a>
+    </fieldset>
+    </section>
+		`
+  container.innerHTML = loginHtml
+
+  document.querySelector('.registry').addEventListener('click', () => {
+    renderLogin()
+  })
+
+  const nameEl = document.querySelector('#name')
+  const loginEl = document.querySelector('#login')
+  const passwordEl = document.querySelector('#password')
+  const submitButton = document.querySelector('.button-main')
+
+  submitButton.addEventListener('click', () => {
+    registration(nameEl.value, loginEl.value, passwordEl.value)
+      .then((response) => {
+        return response.json()
+      })
+      .then((data) => {
+        setToken(data.user.token)
+        setName(data.user.name)
+        fetchAndRenderComments()
+      })
+  })
+}
